@@ -93,4 +93,4 @@ You can run commands to get the endpoint and port number of your deployed Helm r
    
 ## Summary
 
-With even small simple apps requiring   multiple Kubernetes objects,  Helm charts greatly simplify the process of distributing and updating your Kuberenetes based apps. Helm repos allow you to distribute your Helm charts via HTTP further simplifying the process of distributing and deploying your apps.
+With even small simple apps requiring   multiple Kubernetes objects,  Helm charts greatly simplify the process of distributing and updating your Kubernetes based apps. Helm repos allow you to distribute your Helm charts via HTTP, further simplifying the process of distributing and deploying your apps.
