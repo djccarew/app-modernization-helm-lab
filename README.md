@@ -12,7 +12,7 @@ For any deployment, you need several Kubernetes commands (kubectl) to create and
 
 A Helm chart repository is an HTTP server that houses packaged charts and an index.yaml file. That file has an index of all the charts in the repository. A chart repository can be any HTTP server that can serve YAML and .tar files and can answer GET requests. Therefore, you have many options for hosting your chart repository. You can use a Google Cloud Storage bucket, an Amazon S3 bucket, GitHub pages, or you can create a web server.
 
-In this lab you'll create a Helm char reposiotry and use it to deploy a smple JEE app to IBM Cloud Private using the Helm CLI
+In this lab you'll create a Helm chart repository and use it to deploy a simple JEE app to IBM Cloud Private using the Helm CLI
 
 ### Step 1: Clone the Github repo that contains the code and templates  used to create the Helm repository 
 
@@ -22,7 +22,7 @@ In this lab you'll create a Helm char reposiotry and use it to deploy a smple JE
 
 ![Search results](images/ss1.png)
 
-3. Select the repository `djccarew/app-modernization-legacy-jee-app` and then click on the Fork icon
+3. Select the repository `djccarew/app-modernization-legacy-jee-app` and then click on the **Fork** icon
 
 4. Click the **Clone or download** button and copy the HTTPS URL to your clipboard
 
@@ -33,7 +33,7 @@ In this lab you'll create a Helm char reposiotry and use it to deploy a smple JE
      cd app-modernization-helm-lab
      
 ```
-6. Using the file browser take a look at the files in the **chart** folder. This is a Helm chart with child charts for the web app and Apache Derby portions of the app.
+6. Using the Github's UI  file browser to  take a look at the files in the **chart** folder. This is a Helm chart with child charts for the web app and Apache Derby(database)  portions of the app.
 
 ### Step 2: Create the artifacts for the Helm repository 
 
@@ -93,4 +93,4 @@ You can run commands to get the endpoint and port number of your deployed Helm r
    
 ## Summary
 
-With even small simple apps requiring   multiple Kubernetes objects,  Helm charts grealy simplify process of distributing and updating your Kuberenetes based apps. Helm repos allow you to distribute your Helm charts via HTTP further simplifying the process of  distributing and deploying your apps.
+With even small simple apps requiring   multiple Kubernetes objects,  Helm charts greatly simplify the process of distributing and updating your Kuberenetes based apps. Helm repos allow you to distribute your Helm charts via HTTP further simplifying the process of distributing and deploying your apps.
