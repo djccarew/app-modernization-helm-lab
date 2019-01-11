@@ -71,7 +71,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a simple 
 
 1. In your terminal window type the following command, substituting your logged in  username for [uname] as the repo name  and your github username for [ghuname]  **Note**: Your repo name must be unique accross the IBM Cloud Private  Cluster 
 ```
-   helm add [uname] https://[ghuname].github.io/app-modernization-legacy-jee-app/charts --tls
+   helm repo add [uname] https://[ghuname].github.io/app-modernization-legacy-jee-app/charts --tls
 ```
 
 ### Step 5: Deploy the legacy JEE app from your new Helm repo
