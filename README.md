@@ -39,7 +39,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a simple 
 
 ### Step 2: Create the artifacts for the Helm repository 
 
-1. From the command line type in the following uncommeneted commands 
+1. From the command line type in the following (uncommented) commands 
 ```
    # Create  a folder for the Helm repository 
    mkdir -p docs/charts
