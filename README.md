@@ -18,4 +18,79 @@ In this lab you'll create a Helm char reposiotry and use it to deploy a smple JE
 
 1. Login in [your Github account](https://github.com)
 
-2. 
+2. In the search bar at the top left type in `app-modernization-legacy-jee-app` 
+
+![Search results](images/ss1.png)
+
+3. Select the repository `djccarew/app-modernization-legacy-jee-app` and then click on the Fork icon
+
+4. Click the **Clone or download** button and copy the HTTPS URL to your clipboard
+
+5. In a terminal window with the git client type in the following commands  appending the HTTS URL from your clipboard
+
+```
+     git clone [HTTPS URL for NEW REPO]
+     cd app-modernization-helm-lab
+     
+```
+6. Using the file browser take a look at the files in the **chart** folder. This is a Helm chart with child charts for the web app and Apache Derby portions of the app.
+
+### Step 2: Create the artifacts for the Helm repository 
+
+1. From the command line type in the following uncommeneted commands 
+```
+   # Create  a folder for the Helm repository 
+   mkdir -p docs/charts
+   
+   # Generate the chart archive 
+   helm package chart/liberty-starter
+   
+   # Move generated tar.gz file to directory created for repo 
+   mv liberty-starter-1.0.0.tgz docs/charts
+   
+   # Generate index for repository
+   # substitute your github username for [ghuname]
+   helm repo index docs/charts --url https://[ghuname].github.io/app-modernization-legacy-jee-app/charts
+   
+```
+
+### Step 3: Configure Github to serve up the repo via HTTP/HTTPS
+
+1. In the Settings for your repo in the *GitHub Pages* section select the *master branch /docs folder* for GitHub Pages.
+
+![Github Pages](images/ss2.png)
+
+2. In your terminal window type the following command, substituting your github username for [ghuname]. Verify that the contents of *index.yaml* are returned
+```
+   curl https://[ghuname].github.io/app-modernization-legacy-jee-app/charts/index.yaml
+```
+
+### Step 4: Add your repo to the IBM Cloud Private list of repos
+
+1. In your terminal window type the following command, substituting your logged in  username for [uname] as the repo name  and your github username for [ghuname]  **Note**: Your repo name must be unique accross the IBM Cloud Private  Cluster 
+```
+   helm add [uname] https://[ghuname].github.io/app-modernization-legacy-jee-app/charts --tls
+```
+
+### Step 5: Deploy the legacy JEE app from your new Helm repo
+   
+1. In your terminal window type the following command, substituting your logged in  username for [uname] and your ICP namespace for [yournamespace].  **Note**: Helm charts can be deployed multiple  times but each deployment must have a unique name
+```
+   helm install --namespace [yournamespace] --name liberty-starter-[uname] --tls
+```
+
+### Step 6: Launch your deployed app
+
+You can run commands to get the endpoint and port number of your deployed Helm release but it's easier to launch the app from the IBM Cloud Private Web UI.
+
+1. Launch the IBM Cloud Private Web UI using the URL given to you by your instructor and login in.
+
+2. In the Navigation area on the left expand **Workloads** and select **Helm Releases**
+
+3. Look for your Helm Releases in the list and click on the **Launch** link on the right
+
+4. Verify that the app's UI opens in another tab. Enter your name in the textbox  and hit the return key. Verify that your name appears below the textbox as the app stores your name in a  database and then retireves it and displays it in  the UI.
+   
+## Summary
+
+With even small simple apps requiring   multiple Kubernetes objects,  Helm charts grealy simplify process of distributing and updating your Kuberenetes based apps. Helm repos allow you to distribute your Helm charts via HTTP further simplifying the process of  distributing and deploying your apps.
