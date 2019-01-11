@@ -39,21 +39,39 @@ In this lab you'll create a Helm chart repository and use it to deploy a simple 
 
 ### Step 2: Create the artifacts for the Helm repository 
 
-1. From the command line type in the following (uncommented) commands 
+1. From the command line type in (or copy and paste in) the following (uncommented) commands 
 ```
    # Create  a folder for the Helm repository 
    mkdir -p docs/charts
    
-   # Generate the chart archive 
-   helm package chart/liberty-starter
+   # Helm charts get their names from the  folder they reside in.
+   # Rename the folder to something unique  when using a shared ICP Cluster for this lab
+   # Substitute your username (eg user04) for [uname]
+   mv chart/liberty-starter chart/liberty-starter-[uname]
+   
+   # Generate the chart archive. Substitute your username (eg user04) for [uname]
+   helm package chart/liberty-starter-[uname]
    
    # Move generated tar.gz file to directory created for repo 
-   mv liberty-starter-1.0.0.tgz docs/charts
+   # Substitute your username (eg user04) for [uname]
+   mv liberty-starter-[uname]-1.0.0.tgz docs/charts
    
    # Generate index for repository
    # substitute your github username for [ghuname]
    helm repo index docs/charts --url https://[ghuname].github.io/app-modernization-legacy-jee-app/charts
    
+```
+
+2. From the command line type in (or copy and paste in) the following (uncommented) commands to push your changes to Github
+```
+   # Flag changes to be pushed
+   git add .
+   
+   # Commit changes
+   git commit -m 'Generated Helm repo for sample app'
+   
+   # Push to remote Github repo (you may be prompted for your Github credentials
+   git push -u origin master
 ```
 
 ### Step 3: Configure Github to serve up the repo via HTTP/HTTPS
@@ -78,7 +96,8 @@ In this lab you'll create a Helm chart repository and use it to deploy a simple 
    
 1. In your terminal window type the following command, substituting your logged in  username for [uname] and your ICP namespace for [yournamespace].  **Note**: Helm charts can be deployed multiple  times but each deployment must have a unique name
 ```
-   helm install --namespace [yournamespace] --name liberty-starter-[uname] --tls
+   # Subsitute your user name for [uname] (eg user04)
+   helm install --namespace [yournamespace] --name liberty-starter-[uname] [uname]/liberty-starter-[uname] --tls
 ```
 
 ### Step 6: Launch your deployed app
