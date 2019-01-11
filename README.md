@@ -26,6 +26,8 @@ In this lab you'll create a Helm chart repository and use it to deploy a simple 
 
 4. Click the **Clone or download** button and copy the HTTPS URL to your clipboard
 
+![Clone URL](images/ss3.png)
+
 5. In a terminal window with the git client type in the following commands  appending the HTTS URL from your clipboard
 
 ```
@@ -60,7 +62,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a simple 
 
 ![Github Pages](images/ss2.png)
 
-2. In your terminal window type the following command, substituting your github username for [ghuname]. Verify that the contents of *index.yaml* are returned
+2. In your terminal window type the following command, substituting your github username for *[ghuname]*. Verify that the contents of *index.yaml* are returned
 ```
    curl https://[ghuname].github.io/app-modernization-legacy-jee-app/charts/index.yaml
 ```
