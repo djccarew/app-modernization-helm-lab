@@ -51,7 +51,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a simple 
 
    # Fixup chart metadata so chart name matches new folder name
    # Substitute  your logged in  username for [uname]
-   sed -i 's/liberty-starter/liberty-starter-[uname]' chart/liberty-starter-[uname]/Chart.yaml
+   sed -i 's/liberty-starter/liberty-starter-[uname]/' chart/liberty-starter-[uname]/Chart.yaml
 
    # Generate the chart archive. Substitute your username (eg user04) for [uname]
    helm package chart/liberty-starter-[uname] -d docs/charts
