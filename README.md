@@ -1,6 +1,8 @@
 # IBM Client Developer Advocacy App Modernization Series
 
-## Lab - Creating your own Helm repositories and deploying to IBM Cloud Private
+## Lab - Migrating Legacy JEE apps to IBM Cloud Private
+
+### Part 1 - Working with Helm
 
 ## Overview
 
@@ -12,7 +14,7 @@ For any deployment, you need several Kubernetes commands (kubectl) to create and
 
 A Helm chart repository is an HTTP server that houses packaged charts and an index.yaml file. That file has an index of all the charts in the repository. A chart repository can be any HTTP server that can serve YAML and .tar files and can answer GET requests. Therefore, you have many options for hosting your chart repository. You can use a Google Cloud Storage bucket, an Amazon S3 bucket, GitHub pages, or you can create a web server.
 
-In this lab you'll create a Helm chart repository and use it to deploy a simple JEE app to IBM Cloud Private using the Helm CLI
+In this lab you'll create a Helm chart repository and use it to deploy a small  JEE app to IBM Cloud Private using the Helm CLI
 
 ### Step 1: Clone the Github repo that contains the code and templates  used to create the Helm repository
 
@@ -70,7 +72,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a simple 
    # Commit changes
    git commit -m 'Generated Helm repo for sample app'
 
-   # Push to remote Github repo (you may be prompted for your Github credentials
+   # Push to remote Github repo (you may be prompted for your Github credentials)
    git push -u origin master
 ```
 
@@ -89,7 +91,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a simple 
 
 1. In your terminal window type the following command, substituting your logged in  username for [uname] as the repo name  and your github username for [ghuname]  **Note**: Your repo name must be unique across the IBM Cloud Private  Cluster
 ```
-   helm repo add [uname]-repo https://[ghuname].github.io/app-modernization-legacy-jee-app/charts --tls
+   helm repo add [uname]-repo https://[ghuname].github.io/app-modernization-legacy-jee-app/charts
 ```
 
 ### Step 5: Deploy the legacy JEE app from your new Helm repo
@@ -102,7 +104,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a simple 
 
 ### Step 6: Launch your deployed app
 
-You can run commands to get the endpoint and port number of your deployed Helm release but it's easier to launch the app from the IBM Cloud Private Web UI.
+You can run commands to get the endpoint and port number of your deployed Helm release but it's easier to get this info from the  IBM Cloud Private Web UI.
 
 1. Launch the IBM Cloud Private Web UI using the URL given to you by your instructor and login in.
 
@@ -111,6 +113,8 @@ You can run commands to get the endpoint and port number of your deployed Helm r
 3. Look for your Helm Release in the list and click on the **Launch** link on the right
 
 4. Verify that the app's UI opens in another tab. Enter your name in the textbox and hit the return key. Verify that your name appears below the textbox as the app stores your name in a  database and then retrieves it and displays it in the UI.
+
+![Running app](images/ss4.png)
 
 ## Summary
 
