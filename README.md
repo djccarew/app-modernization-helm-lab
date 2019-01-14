@@ -41,6 +41,8 @@ In this lab you'll create a Helm chart repository and use it to deploy a small  
 
 ### Step 2: Create the artifacts for the Helm repository
 
+**Note:** This lab is designed for a multiuser IBM Cloud Private installation where each student is using a client shell with a unique username available via the ENV var $USER.
+
 1. From the command line type in (or copy and paste in) the following (uncommented) commands
 ```
    # Create  a folder for the Helm repository
@@ -48,15 +50,13 @@ In this lab you'll create a Helm chart repository and use it to deploy a small  
 
    # Helm charts get their names from the  folder they reside in.
    # Rename the folder to something unique  when using a shared ICP Cluster for this lab
-   # Substitute your username (eg user04) for [uname]
-   mv chart/liberty-starter chart/liberty-starter-[uname]
+   mv chart/liberty-starter chart/liberty-starter-$USER
 
    # Fixup chart metadata so chart name matches new folder name
-   # Substitute  your logged in  username for [uname]
-   sed -i 's/liberty-starter/liberty-starter-[uname]/' chart/liberty-starter-[uname]/Chart.yaml
+   sed -i "s/liberty-starter/liberty-starter-$USER/" chart/liberty-starter-$USER/Chart.yaml
 
-   # Generate the chart archive. Substitute your username (eg user04) for [uname]
-   helm package chart/liberty-starter-[uname] -d docs/charts
+   # Generate the chart archive. 
+   helm package chart/liberty-starter-$USER -d docs/charts
 
    # Generate index for repository
    # substitute your github username for [ghuname]
@@ -89,17 +89,17 @@ In this lab you'll create a Helm chart repository and use it to deploy a small  
 
 ### Step 4: Add your repo to the IBM Cloud Private list of repos
 
-1. In your terminal window type the following command, substituting your logged in  username for [uname] as the repo name  and your github username for [ghuname]  **Note**: Your repo name must be unique across the IBM Cloud Private  Cluster
+1. In your terminal window type the following command, substituting your logged in  username for $USER as the repo name  and your github username for [ghuname]  **Note**: Your repo name must be unique across the IBM Cloud Private  Cluster
 ```
-   helm repo add [uname]-repo https://[ghuname].github.io/app-modernization-legacy-jee-app/charts
+   # Substitute your github username for [ghuname]
+   helm repo add $USER-repo https://[ghuname].github.io/app-modernization-legacy-jee-app/charts
 ```
 
 ### Step 5: Deploy the legacy JEE app from your new Helm repo
 
-1. In your terminal window type the following command, substituting your logged in  username for [uname] and your ICP namespace for [yournamespace].  **Note**: Helm charts can be deployed multiple  times but each deployment must have a unique name
+1. In your terminal window type the following command, substituting your logged in  username for $USER and your ICP namespace for [yournamespace].  **Note**: Helm charts can be deployed multiple  times but each deployment must have a unique name
 ```
-   # substitute your user name for [uname] (eg user04)
-   helm install --namespace [yournamespace] --name liberty-starter-[uname] [uname]-repo/liberty-starter-[uname] --tls
+   helm install --name liberty-starter-$USER $USER-repo/liberty-starter-$USER --tls
 ```
 
 ### Step 6: Launch your deployed app
