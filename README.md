@@ -24,7 +24,7 @@ If you haven't already:
 
 2. From a  client  terminal window log in to the ICP Cluster with the following command:
 ```
-    cloudctl login -a [ICP Master IP]:8443 --skip-ssl-validation
+    cloudctl login -a https://[ICP Master IP]:8443 --skip-ssl-validation
 ```
 
 ### Step 1: Clone the Github repo that contains the code and templates  used to create the Helm repository
@@ -80,6 +80,10 @@ If you haven't already:
 
 2. From the command line type in (or copy and paste in) the following (uncommented) commands to push your changes to Github
 ```
+   # Configure your git profile on the system
+   git config --global user.email "[your-github-account-email]"
+   git config --global user.name "[your name in git]"
+   
    # Flag changes to be pushed
    git add .
 
