@@ -16,6 +16,17 @@ A Helm chart repository is an HTTP server that houses packaged charts and an ind
 
 In this lab you'll create a Helm chart repository and use it to deploy a small  JEE app to IBM Cloud Private using the Helm CLI
 
+### Setup
+
+If you haven't already:
+
+1. Login to the VM designated as the client env to ICP using the credentials  provided  to you
+
+2. From a  client  terminal window log in to the ICP Cluster with the following command:
+```
+    cloudctl login -a [ICP Master IP]:8443 --skip-ssl-validation
+```
+
 ### Step 1: Clone the Github repo that contains the code and templates  used to create the Helm repository
 
 1. Login in [your Github account](https://github.com)
@@ -55,7 +66,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a small  
    # Fixup chart metadata so chart name matches new folder name
    sed -i "s/liberty-starter/liberty-starter-$USER/" chart/liberty-starter-$USER/Chart.yaml
 
-   # Generate the chart archive. 
+   # Generate the chart archive.
    helm package chart/liberty-starter-$USER -d docs/charts
 
    # Generate index for repository
