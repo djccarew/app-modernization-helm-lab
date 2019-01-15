@@ -34,7 +34,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a small  
 
 ```
      git clone [HTTPS URL for NEW REPO]
-     cd app-modernization-helm-lab
+     cd app-modernization-legacy-jee-app
 
 ```
 6. Using the Github's UI  file browser to  take a look at the files in the **chart** folder. This is a Helm chart with child charts for the web app and Apache Derby(database)  portions of the app.
@@ -45,6 +45,9 @@ In this lab you'll create a Helm chart repository and use it to deploy a small  
 
 1. From the command line type in (or copy and paste in) the following (uncommented) commands
 ```
+   # Initialize helm user profile with a one-time action
+   helm init --client-only
+   
    # Create  a folder for the Helm repository
    mkdir -p docs/charts
 
