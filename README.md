@@ -10,7 +10,7 @@ Helm is a package manager for Kubernetes. Package managers automate the process 
 
 An application in Kubernetes typically consists of at least two resource types: a deployment resource, which describes a set of pods to be deployed together, and a services resource, which defines endpoints for accessing the APIs in those pods. The application can also include ConfigMaps, Secrets, and Ingress.
 
-For any deployment, you need several Kubernetes commands (kubectl) to create and configure resources. Instead of manually creating each resource separately, you can create many resources with one command grealtly simplifying the process and allowing you to manage the releted resources as a single unit called a chart.
+For any deployment, you need several Kubernetes commands (kubectl) to create and configure resources. Instead of manually creating each resource separately, you can create many resources with one command greatly simplifying the process and allowing you to manage the releted resources as a single unit called a chart.
 
 A Helm chart repository is an HTTP server that houses packaged charts and an index.yaml file. That file has an index of all the charts in the repository. A chart repository can be any HTTP server that can serve YAML and .tar files and can answer GET requests. Therefore, you have many options for hosting your chart repository. You can use a Google Cloud Storage bucket, an Amazon S3 bucket, GitHub pages, or you can create a web server.
 
@@ -31,24 +31,24 @@ If you haven't already:
 
 1. Login in [your Github account](https://github.com)
 
-2. In the search bar at the top left type in `app-modernization-legacy-jee-app`
+2. In the search bar at the top left type in `app-modernization-plants-by-websphere-jee6`
 
 ![Search results](images/ss1.png)
 
-3. Select the repository `djccarew/app-modernization-legacy-jee-app` and then click on the **Fork** icon
+3. Select the repository `djccarew\app-modernization-plants-by-websphere-jee6` and then click on the **Fork** icon
 
 4. Click the **Clone or download** button and copy the HTTPS URL to your clipboard
 
 ![Clone URL](images/ss3.png)
 
-5. In a terminal window with the git client type in the following commands  appending the HTTS URL from your clipboard
+5. In a terminal window with the git client type in the following commands  appending the HTTPS URL from your clipboard
 
 ```
      git clone [HTTPS URL for NEW REPO]
-     cd app-modernization-legacy-jee-app
+     cd app-modernization-plants-by-websphere-jee6
 
 ```
-6. Using the Github's UI  file browser to  take a look at the files in the **chart** folder. This is a Helm chart with child charts for the web app and Apache Derby(database)  portions of the app.
+6. Using the Github's UI  file browser to  take a look at the files in the **chart** folder. This is a Helm chart with child charts for the web app and MariaDB  portions of the app. Since there already is a published chart for  MariaDB, it is listed  as a required child chart in the file **requirements.yaml** and you don't have to create a chart for the MariaDB portion of the app.
 
 ### Step 2: Create the artifacts for the Helm repository
 
@@ -58,23 +58,16 @@ If you haven't already:
 ```
    # Initialize helm user profile with a one-time action
    helm init --client-only
-   
-   # Create  a folder for the Helm repository
-   mkdir -p docs/charts
 
-   # Helm charts get their names from the  folder they reside in.
-   # Rename the folder to something unique  when using a shared ICP Cluster for this lab
-   mv chart/liberty-starter chart/liberty-starter-$USER
-
-   # Fixup chart metadata so chart name matches new folder name
-   sed -i "s/liberty-starter/liberty-starter-$USER/" chart/liberty-starter-$USER/Chart.yaml
+   # Fetch required MariaDB chart
+   helm dependency update chart/pbw-liberty-mariadb
 
    # Generate the chart archive.
-   helm package chart/liberty-starter-$USER -d docs/charts
+   helm package chart/pbw-liberty-mariadb -d docs/charts
 
    # Generate index for repository
    # substitute your github username for [ghuname]
-   helm repo index docs/charts --url https://[ghuname].github.io/app-modernization-legacy-jee-app/charts
+   helm repo index docs/charts --url https://[ghuname].github.io/app-modernization-plants-by-websphere-jee6/charts
 
 ```
 
@@ -82,8 +75,8 @@ If you haven't already:
 ```
    # Configure your git profile on the system
    git config --global user.email "[your-github-account-email]"
-   git config --global user.name "[your name in git]"
-   
+   git config --global user.name "[your github username]"
+
    # Flag changes to be pushed
    git add .
 
@@ -102,7 +95,7 @@ If you haven't already:
 
 2. In your terminal window type the following command, substituting your github username for *[ghuname]*. Verify that the contents of *index.yaml* are returned
 ```
-   curl https://[ghuname].github.io/app-modernization-legacy-jee-app/charts/index.yaml
+   curl https://[ghuname].github.io/app-modernization-plants-by-websphere-jee6/charts/index.yaml
 ```
 
 ### Step 4: Add your repo to the IBM Cloud Private list of repos
@@ -110,19 +103,19 @@ If you haven't already:
 1. In your terminal window type the following command, substituting your logged in  username for $USER as the repo name  and your github username for [ghuname]  **Note**: Your repo name must be unique across the IBM Cloud Private  Cluster
 ```
    # Substitute your github username for [ghuname]
-   helm repo add $USER-repo https://[ghuname].github.io/app-modernization-legacy-jee-app/charts
+   helm repo add $USER-repo https://[ghuname].github.io/app-modernization-plants-by-websphere-jee6/charts
 ```
 
 ### Step 5: Deploy the legacy JEE app from your new Helm repo
 
 1. In your terminal window type the following command, substituting your logged in  username for $USER and your ICP namespace for [yournamespace].  **Note**: Helm charts can be deployed multiple  times but each deployment must have a unique name
 ```
-   helm install --name liberty-starter-$USER $USER-repo/liberty-starter-$USER --tls
+   helm install --name pbw-liberty-mariadb-$USER --set liberty.image.namespace=[yournamespace] $USER-repo/pbw-liberty-mariadb --tls
 ```
 
 ### Step 6: Launch your deployed app
 
-You can run commands to get the endpoint and port number of your deployed Helm release but it's easier to get this info from the  IBM Cloud Private Web UI.
+You can run commands to get the endpoint and port number of your deployed Helm release but it's easy to get this info from the  IBM Cloud Private Web UI.
 
 1. Launch the IBM Cloud Private Web UI using the URL given to you by your instructor and login in.
 
@@ -130,9 +123,15 @@ You can run commands to get the endpoint and port number of your deployed Helm r
 
 3. Look for your Helm Release in the list and click on the **Launch** link on the right
 
-4. Verify that the app's UI opens in another tab. Enter your name in the textbox and hit the return key. Verify that your name appears below the textbox as the app stores your name in a  database and then retrieves it and displays it in the UI.
+4. Verify that the app's UI opens in another tab. Click on the **HELP** link.
 
 ![Running app](images/ss4.png)
+
+5. Click on **Reset database** to populate the MariaDB database with data
+
+6. Verify that browsing different section of the online catalog shows product descriptions and images.
+
+![Online catalog](images/ss5.png)
 
 ## Summary
 
