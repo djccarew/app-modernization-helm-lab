@@ -1,8 +1,8 @@
 # IBM Client Developer Advocacy App Modernization Series
 
-## Lab - Migrating Legacy JEE apps to IBM Cloud Private
+## Lab - Migrating Legacy JEE apps to IBM Cloud Kubernetes Service
 
-### Part 2 - Working with Helm
+### Part 1 - Working with Helm
 
 ## Overview
 
@@ -14,26 +14,83 @@ For any deployment, you need several Kubernetes commands (kubectl) to create and
 
 A Helm chart repository is an HTTP server that houses packaged charts and an index.yaml file. That file has an index of all the charts in the repository. A chart repository can be any HTTP server that can serve YAML and .tar files and can answer GET requests. Therefore, you have many options for hosting your chart repository. You can use a Google Cloud Storage bucket, an Amazon S3 bucket, GitHub pages, or you can create a web server.
 
-In this lab you'll create a Helm chart repository and use it to deploy a small  JEE app to IBM Cloud Private using the Helm CLI
+In this lab you'll create a Helm chart repository and use it to deploy a small  JEE app to  the IBM Cloud Kubernetes Service using the Helm CLI
 
 ### Setup
 
 If you haven't already:
 
-1. Complete *Part 1 -  Working with IBM Cloud Transformation Advisor*  by following the instructions [here](https://github.com/djccarew/app-modernization-ta-lab)
+1. Login to the VM designated as the client env to  the IBM Cloud Kubernetes Service  using the credentials  provided  to you
 
-2. Login to the VM designated as the client env to ICP using the credentials  provided  to you
+2. From a  client  terminal window log in to the IBM Cloud Kubernetes Service  with your IBM Cloud credentials using the following command:
+```
+    ibmcloud  login -a https://api.us-east.bluemix.net
+```
+3. Target the Kubernetes Service region
+```
+   ibmcloud ks cluster-config
+```
+4. Get the command to set the environment variable and download the Kubernetes configuration files. Substitute you cluster's name for *[YOUR CLUSTER]*
+```bash
+   # Note substitute your username e.g. user05 for  [YOUR_USERNAME]
+   ibmcloud ks cluster-config [YOUR_USERNAME]-cluster
+```
+5.  Set the KUBECONFIG environment variable. Copy the output from the previous command, paste it in your terminal and then run it as a command. The output from the previous command should look similar to the following.
+```
+   export KUBECONFIG=/...-cluster.yaml
+```
+6. Initialize Helm client
+```
+   helm init --client-only
+```
 
-3. From a  client  terminal window log in to the ICP Cluster with the following command:
-```
-    cloudctl login -a https://[ICP Master IP]:8443 --skip-ssl-validation
-```
-4. Go to the folder where you cloned the Plants By WebSphere  app in the previous lab
-```
-   cd app-modernization-plants-by-websphere-jee6
-```
+### Step 1: Clone the Github repo that contains the code, build an Open Liberty image of the app and then push it to the IBM Cloud Kubernetes container registry
 
-### Step 1: Look at the structure of the Helm chart for the Plants By WebSphere app
+1. Login in [your Github account](https://github.com)
+
+2. In the search bar at the top left type in `app-modernization-plants-by-websphere-jee6`
+
+    ![Search results](images/ss0.png)
+
+3. Select the repository `djccarew\app-modernization-plants-by-websphere-jee6` and then click on the **Fork** icon
+
+4. Click the **Clone or download** button from your copy of the forked repo and copy the HTTPS URL to your clipboard
+
+    ![Clone URL](images/ss00.png)
+
+5. From a client terminal window clone the Git repo  with  the following commands  appending the HTTPS URL from your clipboard
+
+    ```text
+    git clone [HTTPS URL for NEW REPO]
+    cd app-modernization-plants-by-websphere-jee6
+    ```
+6. Build the application .ear file using Maven by typing in (or copying and pasting in) the following command
+
+    ```text
+    mvn package
+    ```
+
+7. Build a docker image  by typing in (or copying and pasting in) the following (uncommented) commands
+
+    ```bash
+    # Note substitute your  namespace  for [YOUR_NAMESPACE]
+    docker build -t us.icr.io/[YOUR_NAMESPACE]/pbw-mariadb-web:1.0.0 .
+    ```
+
+8. Log in to the Container registry with the following command:
+
+    ```bash
+    ibmcloud  cr login
+    ```
+
+9. Push the image to the IBM Container registry by typing in (or copying and pasting in) the following (uncommented) commands
+
+    ```bash
+    # Note substitute your username e.g. user05 for  [YOUR_USERNAME]
+    docker push us.icr.io/appmod_ss/[YOUR_USERNAME]/pbw-mariadb-web:1.0.0
+    ```
+
+### Step 2: Look at the structure of the Helm chart for the Plants By WebSphere app
 
 1. Login in [your Github account](https://github.com)
 
@@ -41,15 +98,11 @@ If you haven't already:
 
 3. Using the Github's UI  file browser to  take a look at the files in the **chart** folder. This is a Helm chart with child charts for the web app and MariaDB  portions of the app. Since there already is a published chart for  MariaDB, it is listed  as a required child chart in the file **requirements.yaml** and you don't have to create a chart for the MariaDB portion of the app.
 
-### Step 2: Create the artifacts for the Helm repository
+### Step 3: Create the artifacts for the Helm repository
 
-**Note:** This lab is designed for a multiuser IBM Cloud Private installation where each student is using a client shell with a unique username available via the ENV var $USER.
 
 1. From your client terminal  type in (or copy and paste in) the following (uncommented) commands
 ```
-   # Initialize helm user profile with a one-time action
-   helm init --client-only
-
    # Fetch required MariaDB chart
    helm repo add ibmcom https://raw.githubusercontent.com/IBM/charts/master/repo/stable
    helm dependency update chart/pbw-liberty-mariadb
@@ -79,7 +132,7 @@ If you haven't already:
    git push -u origin master
 ```
 
-### Step 3: Configure Github to serve up the repo via HTTP/HTTPS
+### Step 4: Configure Github to serve up the repo via HTTP/HTTPS
 
 1. In the Settings for your repo in the *GitHub Pages* section select the *master branch /docs folder* for GitHub Pages and click **Save**.
 
@@ -90,30 +143,36 @@ If you haven't already:
    curl https://[ghuname].github.io/app-modernization-plants-by-websphere-jee6/charts/index.yaml
 ```
 
-### Step 4: Add your repo to you list of Helm repos
+### Step 5: Add your repo to you list of Helm repos
 
-1. In your terminal window type the following command, substituting your logged in  username for $USER as the repo name  and your github username for [ghuname]  
+1. In your terminal window type the following command, substituting your  github username for [ghuname]  
 ```
    # Substitute your github username for [ghuname]
-   helm repo add $USER-repo https://[ghuname].github.io/app-modernization-plants-by-websphere-jee6/charts
+   helm repo add my-repo https://[ghuname].github.io/app-modernization-plants-by-websphere-jee6/charts
 ```
 
-### Step 5: Deploy the legacy JEE app from your new Helm repo
+### Step 6: Deploy the legacy JEE app from your new Helm repo
 
-1. In your terminal window type the following command, substituting your logged in  username for $USER and your ICP namespace for [yournamespace].  **Note**: Helm charts can be deployed multiple  times but each deployment must have a unique name
+1. In your terminal window type the following command, substituting your namespace for [yournamespace].  **Note**: Helm charts can be deployed multiple  times but each deployment must have a unique name
 ```
-   helm install --name pbw-liberty-mariadb-$USER --set liberty.image.namespace=[yournamespace] $USER-repo/pbw-liberty-mariadb --tls
+   helm install --name pbw-liberty-mariadb --set liberty.image.registry=us.icr.io --set liberty.image.namespace=[yournamespace] my-repo/pbw-liberty-mariadb
 ```
 
-### Step 6: Launch your deployed app
+### Step 7: Launch your deployed app
 
-You can run commands to get the endpoint and port number of your deployed Helm release but it's easy to get a clickable link to the app's endpoint  info from the  IBM Cloud Private Web UI.
+You'll commands to get the endpoint and port number of your deployed Helm release.
 
-1. Launch the IBM Cloud Private Web UI using the URL given to you by your instructor and login in.
+1. Run the following command to get the port number of your deployed app
+```
+   kubectl --namespace default get service pbw-liberty-mariadb-liberty -o jsonpath='{.spec.ports[0].nodePort}'
+```
 
-2. In the Navigation area on the left expand **Workloads** and select **Helm Releases**
-
-3. Look for your Helm Release in the list and click on the **Launch** link on the right
+2. Run the following command to get the external IP address  of the first worker node in your cluster
+```bash
+   # Substitute your cluster name e.g. user05-cluster for [YOUR_CLUSTER_NAME]
+   ibmcloud cs workers [YOUR_CLUSTER_NAME] | grep -v '^*' | egrep -v "(ID|OK)" | awk '{print $2;}' | head -n1
+```
+3. In your browser's address bar enter the URL of your deployed app. The URL will be the external IP address of the first worker in your cluster followed by a colon and then followed by the port number of your deployed app. For example if your external IP is 169.61.73.182 and the port is 30961 the URL will be ```http://169.61.73.182:30961```
 
 4. Verify that the app's UI opens in another tab. Click on the **HELP** link.
 
