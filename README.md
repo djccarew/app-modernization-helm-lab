@@ -54,8 +54,8 @@ In this lab you'll create a Helm chart repository and use it to deploy a small J
 7. Build a docker image  by typing in (or copying and pasting in) the following (uncommented) commands
 
     ```bash
-    # Note substitute your  namespace  for [YOUR_NAMESPACE]
-    docker build -t us.icr.io/[YOUR_NAMESPACE]/pbw-mariadb-web:1.0.0 .
+    # Note substitute your username e.g. user05 for  [YOUR_USERNAME]
+    docker build -t us.icr.io/appmod_ss/[YOUR_USERNAME]/pbw-mariadb-web:1.0.0 .
     ```
 
 8. Log in to the Container registry with the following command:
