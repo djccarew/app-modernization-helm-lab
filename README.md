@@ -8,38 +8,19 @@
 
 Helm is a package manager for Kubernetes. Package managers automate the process of installing, configuring, upgrading, and removing computer programs. Examples include the Red Hat Package Manager (RPM), Homebrew, and Windows® PackageManagement.
 
-An application in Kubernetes typically consists of at least two resource types: a deployment resource, which describes a set of pods to be deployed together, and a services resource, which defines endpoints for accessing the APIs in those pods. The application can also include ConfigMaps, Secrets, and Ingress.
+An application in Kubernetes typically consists of at least two resource types: a deployment resource, which describes a set of pods to be deployed together, and a service resource, which defines endpoints for accessing the APIs in those pods. In additional to a deployment and a service, an application will typically include other Kubernetes resource types such as ConfigMaps, Secrets, and Ingress.
 
-For any deployment, you need several Kubernetes commands (kubectl) to create and configure resources. Instead of manually creating each resource separately, you can create many resources with one command greatly simplifying the process and allowing you to manage the related resources as a single unit called a chart.
+For any application in Kubernetes, you will need to run several Kubernetes commands (`kubectl`) to create and configure resources. With Helm, instead of manually creating each resource separately, you can create many resources with one command (`helm install`). This greatly simplifies the process and allows you to manage the related resources as a single unit called a Helm chart.
 
-A Helm chart repository is an HTTP server that houses packaged charts and an index.yaml file. That file has an index of all the charts in the repository. A chart repository can be any HTTP server that can serve YAML and .tar files and can answer GET requests. Therefore, you have many options for hosting your chart repository. You can use a Google Cloud Storage bucket, an Amazon S3 bucket, GitHub pages, or you can create a web server.
+Helm charts are stored in a Helm chart repository, which is an HTTP server that houses packaged charts and an `index.yaml` file. The `index.yaml` file has an index of all the charts in the repository. A chart repository can be any HTTP server that can serve YAML and .tar files and can answer GET HTTP requests. Therefore, you have many options for hosting your chart repository such as a Google Cloud Storage bucket, an Amazon S3 bucket or you can create your own web server. For this lab, we will be using GitHub Pages to host our chart repository.
 
-In this lab you'll create a Helm chart repository and use it to deploy a small  JEE app to  the IBM Cloud Kubernetes Service using the Helm CLI
+In this lab you'll create a Helm chart repository and use it to deploy a small JEE app to the IBM Cloud Kubernetes Service using the open source Helm CLI.
 
 ### Setup
 
-If you haven't already:
+1. If following this lab as part of an IBM instructor led workshop, please follow these instructions to setup your workshop environment: https://gist.github.com/jzaccone/0cdc321e5dc8adb0dca98ca861284c01
 
-1. Login to the VM designated as the client env to  the IBM Cloud Kubernetes Service  using the credentials  provided  to you
-
-2. From a  client  terminal window log in to the IBM Cloud Kubernetes Service  with your IBM Cloud credentials using the following command:
-```
-    ibmcloud  login -a https://api.us-east.bluemix.net
-```
-3. Target the Kubernetes Service region
-```
-   ibmcloud ks cluster-config
-```
-4. Get the command to set the environment variable and download the Kubernetes configuration files. Substitute you cluster's name for *[YOUR CLUSTER]*
-```bash
-   # Note substitute your username e.g. user05 for  [YOUR_USERNAME]
-   ibmcloud ks cluster-config [YOUR_USERNAME]-cluster
-```
-5.  Set the KUBECONFIG environment variable. Copy the output from the previous command, paste it in your terminal and then run it as a command. The output from the previous command should look similar to the following.
-```
-   export KUBECONFIG=/...-cluster.yaml
-```
-6. Initialize Helm client
+2. Initialize Helm client
 ```
    helm init --client-only
 ```
