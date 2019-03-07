@@ -18,28 +18,9 @@ In this lab you'll create a Helm chart repository and use it to deploy a small J
 
 ### Setup
 
-If you haven't already:
+1. If following this lab as part of an IBM instructor led workshop, please follow these instructions to setup your workshop environment: https://gist.github.com/jzaccone/0cdc321e5dc8adb0dca98ca861284c01
 
-1. Login to the VM designated as the client env to  the IBM Cloud Kubernetes Service  using the credentials  provided  to you
-
-2. From a  client  terminal window log in to the IBM Cloud Kubernetes Service  with your IBM Cloud credentials using the following command:
-```
-    ibmcloud  login -a https://api.us-east.bluemix.net
-```
-3. Target the Kubernetes Service region
-```
-   ibmcloud ks cluster-config
-```
-4. Get the command to set the environment variable and download the Kubernetes configuration files. Substitute you cluster's name for *[YOUR CLUSTER]*
-```bash
-   # Note substitute your username e.g. user05 for  [YOUR_USERNAME]
-   ibmcloud ks cluster-config [YOUR_USERNAME]-cluster
-```
-5.  Set the KUBECONFIG environment variable. Copy the output from the previous command, paste it in your terminal and then run it as a command. The output from the previous command should look similar to the following.
-```
-   export KUBECONFIG=/...-cluster.yaml
-```
-6. Initialize Helm client
+2. Initialize Helm client
 ```
    helm init --client-only
 ```
