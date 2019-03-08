@@ -117,7 +117,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a small J
 
 ![Github Pages](images/ss2.png)
 
-2. In your terminal window type the following command, substituting your github username for *[ghuname]*. Verify that the contents of *index.yaml* are returned
+2. After a few seconds, your charts will be published. To test this, in your terminal window type the following command, substituting your github username for *[ghuname]*. Verify that the contents of *index.yaml* are returned
 ```
    curl https://[ghuname].github.io/app-modernization-plants-by-websphere-jee6/charts/index.yaml
 ```
