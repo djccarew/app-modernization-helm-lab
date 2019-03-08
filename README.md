@@ -54,8 +54,8 @@ In this lab you'll create a Helm chart repository and use it to deploy a small J
 7. Build a docker image  by typing in (or copying and pasting in) the following (uncommented) commands
 
     ```bash
-    # Note substitute your  namespace  for [YOUR_NAMESPACE]
-    docker build -t us.icr.io/[YOUR_NAMESPACE]/pbw-mariadb-web:1.0.0 .
+    # Note substitute your username e.g. user05 for  [YOUR_USERNAME]
+    docker build -t us.icr.io/appmod_ss/[YOUR_USERNAME]/pbw-mariadb-web:1.0.0 .
     ```
 
 8. Log in to the Container registry with the following command:
@@ -73,11 +73,9 @@ In this lab you'll create a Helm chart repository and use it to deploy a small J
 
 ### Step 2: Look at the structure of the Helm chart for the Plants By WebSphere app
 
-1. Login in [your Github account](https://github.com)
+1. Select your fork  of the repository **app-modernization-plants-by-websphere-jee6** that you forked earlier in this lab.
 
-2. Select your fork  of the repository **app-modernization-plants-by-websphere-jee6** that you forked in the previous lab.
-
-3. Using the Github's UI  file browser to  take a look at the files in the **chart** folder. This is a Helm chart with child charts for the web app and MariaDB  portions of the app. Since there already is a published chart for  MariaDB, it is listed  as a required child chart in the file **requirements.yaml** and you don't have to create a chart for the MariaDB portion of the app.
+2. Using the Github's UI  file browser to  take a look at the files in the **chart** folder. This is a Helm chart with child charts for the web app and MariaDB  portions of the app. Since there already is a published chart for  MariaDB, it is listed  as a required child chart in the file **requirements.yaml** and you don't have to create a chart for the MariaDB portion of the app.
 
 ### Step 3: Create the artifacts for the Helm repository
 
@@ -115,11 +113,11 @@ In this lab you'll create a Helm chart repository and use it to deploy a small J
 
 ### Step 4: Configure Github to serve up the repo via HTTP/HTTPS
 
-1. In the Settings for your repo in the *GitHub Pages* section select the *master branch /docs folder* for GitHub Pages and click **Save**.
+1. Navigate to your forked repo. In the Settings for your repo in the *GitHub Pages* section select the *master branch /docs folder* for GitHub Pages and click **Save**.
 
 ![Github Pages](images/ss2.png)
 
-2. In your terminal window type the following command, substituting your github username for *[ghuname]*. Verify that the contents of *index.yaml* are returned
+2. After a few seconds, your charts will be published. To test this, in your terminal window type the following command, substituting your github username for *[ghuname]*. Verify that the contents of *index.yaml* are returned
 ```
    curl https://[ghuname].github.io/app-modernization-plants-by-websphere-jee6/charts/index.yaml
 ```
@@ -136,7 +134,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a small J
 
 1. In your terminal window type the following command, substituting your namespace for [yournamespace].  **Note**: Helm charts can be deployed multiple  times but each deployment must have a unique name
 ```
-   helm install --name pbw-liberty-mariadb --set liberty.image.registry=us.icr.io --set liberty.image.namespace=[yournamespace] my-repo/pbw-liberty-mariadb
+   helm install --name pbw-liberty-mariadb --set liberty.image.registry=us.icr.io --set liberty.image.namespace=appmod_ss --set liberty.image.name=[YOUR_USERNAME]/pbw-mariadb-web my-repo/pbw-liberty-mariadb
 ```
 
 ### Step 7: Launch your deployed app
