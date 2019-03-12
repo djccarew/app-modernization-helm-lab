@@ -55,7 +55,7 @@ In this lab you'll create a Helm chart repository and use it to deploy a small J
 
     ```bash
     # Note substitute your  namespace  for [YOUR_NAMESPACE]
-    docker build -t us.icr.io/[YOUR_NAMESPACE]/pbw-mariadb-web:1.0.0 .
+    docker build -t us.icr.io/appmod_ss/[YOUR_USERNAME]/pbw-mariadb-web:1.0.0 .
     ```
 
 8. Log in to the Container registry with the following command:
